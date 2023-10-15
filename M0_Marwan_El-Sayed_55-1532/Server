@@ -1,0 +1,43 @@
+
+import socket
+import select
+import sys
+
+# initiate server socket with the TCP connection
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# binding the server socket with the localhost as IP and port number
+port = 61002
+server_socket.bind(('172.20.10.2', port))  # Replace with the actual IP address
+
+# Make the socket listen on this port
+server_socket.listen(61002)
+
+
+
+while True:
+    client, addr = server_socket.accept()# Accept a connection when a client connects
+   
+
+    while True:
+        data_bytes = client.recv(1024)  # Receive data from the client
+      
+
+        data = data_bytes.decode('utf-8')
+
+        if data == "close socket":
+            
+            break
+        else:
+            capitalized_data = data.upper()
+            print(f"Client says: {capitalized_data}")
+
+            # Encode the response message as bytes
+            response_bytes = capitalized_data.encode('utf-8')
+
+            # Send the response back to the client
+            client.send(response_bytes)
+
+    client.close() 
+
+    
